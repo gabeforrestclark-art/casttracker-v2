@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   LayoutDashboard, Map, BookOpen, Share2, DollarSign,
-  BarChart3, Calendar, Megaphone, Trophy, Anchor, ChevronLeft, ChevronRight, Heart
+  BarChart3, Calendar, Megaphone, Trophy, Anchor, ChevronLeft, ChevronRight, Heart, Route
 } from "lucide-react";
 import { JOURNEY_TRIPS } from "@/lib/journeyData";
 
@@ -16,6 +16,7 @@ const navItems = [
   { path: "/sponsors", icon: Trophy, label: "Sponsors" },
   { path: "/fundraising", icon: Heart, label: "Fundraising" },
   { path: "/campaign", icon: Megaphone, label: "Media Campaign" },
+  { path: "/roadmap", icon: Route, label: "Roadmap" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -14,6 +14,7 @@ import Fundraising from "./pages/Fundraising";
 import Analytics from "./pages/Analytics";
 import ContentCalendar from "./pages/ContentCalendar";
 import MediaCampaign from "./pages/MediaCampaign";
+import Roadmap from "./pages/Roadmap";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -28,6 +29,7 @@ function Router() {
         <Route path="/analytics" component={Analytics} />
         <Route path="/calendar" component={ContentCalendar} />
         <Route path="/campaign" component={MediaCampaign} />
+        <Route path="/roadmap" component={Roadmap} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>

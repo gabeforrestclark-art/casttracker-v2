@@ -3,6 +3,8 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { mediaRouter } from "./mediaRouter";
+import { planRouter } from "./planRouter";
+import { roadmapRouter } from "./roadmapRouter";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -19,6 +21,8 @@ export const appRouter = router({
   }),
 
   media: mediaRouter,
+  plan: planRouter,
+  roadmap: roadmapRouter,
 });
 
 export type AppRouter = typeof appRouter;

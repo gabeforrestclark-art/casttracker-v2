@@ -15,6 +15,20 @@
       "when": 1774759733722,
       "tag": "0001_nervous_invaders",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1774760760966,
+      "tag": "0002_steady_sauron",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1774760902624,
+      "tag": "0003_dusty_randall_flagg",
+      "breakpoints": true
     }
   ]
 }

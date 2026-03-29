@@ -9,3 +9,25 @@
 - [x] Build TripMediaGallery component (thumbnail grid, lightbox preview, delete)
 - [x] Integrate media gallery into TripLog page per trip row
 - [x] Write vitest test for media upload procedure
+
+## Journey Planning Feature
+- [ ] Add tripPlan table to drizzle schema (tripNumber, goNoGo, prepNotes, checklistItems JSON, updatedAt)
+- [ ] Run pnpm db:push to migrate schema
+- [ ] Add backend planRouter (getByTrip, upsert, weather lookup via Open-Meteo API)
+- [ ] Register planRouter in appRouter
+- [ ] Build WeatherWidget component (7-day forecast for trip location coords)
+- [ ] Build TripChecklist component (gear checklist with check/uncheck per item)
+- [ ] Build GoNoGo component (decision badge + override toggle)
+- [ ] Build JourneyPlanner page (upcoming trips list + full planner panel)
+- [ ] Add Journey Planner nav item to sidebar
+- [ ] Write vitest tests for planRouter
+
+## Interactive Roadmap Feature
+- [x] Add roadmapTask table to drizzle schema (taskId, checked, updatedAt)
+- [x] Run pnpm db:push to migrate schema
+- [x] Write roadmapRouter (getAll, toggleTask) with persistent DB state
+- [x] Register roadmapRouter in appRouter
+- [x] Write full roadmap data file (phases, days, tasks) covering launch prep through Season 4 finish
+- [x] Build Roadmap page with phase accordion, day rows, checkable tasks, and progress bars
+- [x] Add Roadmap nav item to sidebar Layout
+- [x] Write vitest tests for roadmapRouter

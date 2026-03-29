@@ -40,3 +40,27 @@ export const tripMedia = mysqlTable("tripMedia", {
 
 export type TripMedia = typeof tripMedia.$inferSelect;
 export type InsertTripMedia = typeof tripMedia.$inferInsert;
+
+// Trip Plan table — stores journey planning data per trip
+export const tripPlan = mysqlTable("tripPlan", {
+  id: int("id").autoincrement().primaryKey(),
+  tripNumber: int("tripNumber").notNull().unique(),
+  goNoGo: mysqlEnum("goNoGo", ["go", "no-go", "undecided"]).default("undecided").notNull(),
+  prepNotes: text("prepNotes"),
+  checklistJson: text("checklistJson"), // JSON array of { id, label, checked, category }
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type TripPlan = typeof tripPlan.$inferSelect;
+export type InsertTripPlan = typeof tripPlan.$inferInsert;
+
+// Roadmap task completion state — persists which tasks Gabe has checked off
+export const roadmapTask = mysqlTable("roadmapTask", {
+  id: int("id").autoincrement().primaryKey(),
+  taskId: varchar("taskId", { length: 128 }).notNull().unique(),
+  checked: int("checked").notNull().default(0), // 0 = unchecked, 1 = checked
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RoadmapTask = typeof roadmapTask.$inferSelect;
+export type InsertRoadmapTask = typeof roadmapTask.$inferInsert;
