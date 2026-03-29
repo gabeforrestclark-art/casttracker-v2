@@ -6,11 +6,14 @@ import {
   CATEGORY_LABELS,
   getTotalTaskCount,
   type RoadmapTask,
+  type RoadmapPhase,
+  type RoadmapDay,
 } from "@/lib/roadmapData";
 import { CheckCircle2, Circle, ChevronDown, ChevronRight, Flag, MapPin, Tent, Fish } from "lucide-react";
 import { toast } from "sonner";
+import { TaskDetailDrawer } from "@/components/TaskDetailDrawer";
 
-// ─── Progress bar ────────────────────────────────────────────────────────────
+// ─── Progress bar ─────────────────────────────────────────────────────────────
 function ProgressBar({ value, max, color }: { value: number; max: number; color: string }) {
   const pct = max === 0 ? 0 : Math.round((value / max) * 100);
   return (
@@ -23,33 +26,43 @@ function ProgressBar({ value, max, color }: { value: number; max: number; color:
   );
 }
 
-// ─── Single task row ─────────────────────────────────────────────────────────
+// ─── Single task row ──────────────────────────────────────────────────────────
 function TaskRow({
   task,
   checked,
   onToggle,
+  onOpenDetail,
 }: {
   task: RoadmapTask;
   checked: boolean;
   onToggle: (id: string, val: boolean) => void;
+  onOpenDetail: (task: RoadmapTask) => void;
 }) {
   const catColor = CATEGORY_COLORS[task.category];
+  const isMedia = task.category === "media";
   return (
-    <button
-      onClick={() => onToggle(task.id, !checked)}
-      className="w-full flex items-start gap-3 px-3 py-2 rounded-lg text-left transition-colors hover:bg-white/5 group"
-    >
-      <span className="mt-0.5 shrink-0">
+    <div className="w-full flex items-start gap-3 px-3 py-2 rounded-lg text-left transition-colors hover:bg-white/5 group">
+      {/* Checkbox — toggles completion directly */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onToggle(task.id, !checked); }}
+        className="mt-0.5 shrink-0 transition-transform hover:scale-110"
+        title={checked ? "Mark incomplete" : "Mark complete"}
+      >
         {checked ? (
           <CheckCircle2 size={18} style={{ color: catColor }} />
         ) : (
           <Circle size={18} className="text-white/30 group-hover:text-white/60 transition-colors" />
         )}
-      </span>
-      <span className="flex-1 min-w-0">
+      </button>
+
+      {/* Label — opens detail drawer */}
+      <button
+        onClick={() => onOpenDetail(task)}
+        className="flex-1 min-w-0 text-left"
+      >
         <span
           className={`text-sm leading-snug transition-colors ${
-            checked ? "line-through text-white/35" : "text-white/85"
+            checked ? "line-through text-white/35" : "text-white/85 hover:text-white"
           }`}
         >
           {task.label}
@@ -57,28 +70,41 @@ function TaskRow({
         {task.detail && !checked && (
           <span className="block text-xs text-white/40 mt-0.5 italic">{task.detail}</span>
         )}
-      </span>
-      <span
-        className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded uppercase tracking-wide"
-        style={{ background: catColor + "33", color: catColor }}
-      >
-        {CATEGORY_LABELS[task.category]}
-      </span>
-    </button>
+        {isMedia && !checked && (
+          <span className="block text-xs text-purple-400 mt-0.5">📢 Click to compose social post</span>
+        )}
+      </button>
+
+      <div className="flex items-center gap-1.5 shrink-0">
+        {isMedia && (
+          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-purple-500/20 text-purple-300 border border-purple-500/30">
+            Social
+          </span>
+        )}
+        <span
+          className="text-[10px] font-semibold px-1.5 py-0.5 rounded uppercase tracking-wide"
+          style={{ background: catColor + "33", color: catColor }}
+        >
+          {CATEGORY_LABELS[task.category]}
+        </span>
+      </div>
+    </div>
   );
 }
 
-// ─── Day card ────────────────────────────────────────────────────────────────
+// ─── Day card ─────────────────────────────────────────────────────────────────
 function DayCard({
   day,
   checkedIds,
   onToggle,
   onBulkToggle,
+  onOpenDetail,
 }: {
-  day: (typeof ROADMAP_PHASES)[0]["days"][0];
+  day: RoadmapDay;
   checkedIds: Set<string>;
   onToggle: (id: string, val: boolean) => void;
   onBulkToggle: (ids: string[], val: boolean) => void;
+  onOpenDetail: (task: RoadmapTask) => void;
 }) {
   const [open, setOpen] = useState(false);
   const taskIds = day.tasks.map(t => t.id);
@@ -162,6 +188,7 @@ function DayCard({
               task={task}
               checked={checkedIds.has(task.id)}
               onToggle={onToggle}
+              onOpenDetail={onOpenDetail}
             />
           ))}
         </div>
@@ -170,17 +197,19 @@ function DayCard({
   );
 }
 
-// ─── Phase accordion ─────────────────────────────────────────────────────────
+// ─── Phase accordion ──────────────────────────────────────────────────────────
 function PhaseAccordion({
   phase,
   checkedIds,
   onToggle,
   onBulkToggle,
+  onOpenDetail,
 }: {
-  phase: (typeof ROADMAP_PHASES)[0];
+  phase: RoadmapPhase;
   checkedIds: Set<string>;
   onToggle: (id: string, val: boolean) => void;
   onBulkToggle: (ids: string[], val: boolean) => void;
+  onOpenDetail: (task: RoadmapTask) => void;
 }) {
   const [open, setOpen] = useState(phase.phaseId === "phase-0");
 
@@ -229,6 +258,7 @@ function PhaseAccordion({
               checkedIds={checkedIds}
               onToggle={onToggle}
               onBulkToggle={onBulkToggle}
+              onOpenDetail={onOpenDetail}
             />
           ))}
         </div>
@@ -240,6 +270,7 @@ function PhaseAccordion({
 // ─── Main Roadmap page ────────────────────────────────────────────────────────
 export default function Roadmap() {
   const totalTasks = getTotalTaskCount();
+  const [activeTask, setActiveTask] = useState<RoadmapTask | null>(null);
 
   const { data, refetch } = trpc.roadmap.getChecked.useQuery(undefined, {
     staleTime: 30_000,
@@ -262,12 +293,16 @@ export default function Roadmap() {
   const overallPct = totalTasks === 0 ? 0 : Math.round((totalDone / totalTasks) * 100);
 
   const handleToggle = (taskId: string, checked: boolean) => {
-    // Optimistic update via refetch after mutation
     toggleMutation.mutate({ taskId, checked }, { onSuccess: () => refetch() });
   };
 
   const handleBulkToggle = (taskIds: string[], checked: boolean) => {
     bulkToggleMutation.mutate({ taskIds, checked }, { onSuccess: () => refetch() });
+  };
+
+  const handleDrawerToggle = (taskId: string) => {
+    const isChecked = checkedIds.has(taskId);
+    toggleMutation.mutate({ taskId, checked: !isChecked }, { onSuccess: () => refetch() });
   };
 
   // Filter state
@@ -299,7 +334,7 @@ export default function Roadmap() {
             <h1 className="text-3xl font-bold tracking-tight">Journey Roadmap</h1>
           </div>
           <p className="text-white/50 text-sm ml-10">
-            Working Man's Waters — Day-by-day plan from launch to the Root River finish line
+            Working Man's Waters — Click any task to open details, add notes, or publish to socials
           </p>
         </div>
 
@@ -366,9 +401,18 @@ export default function Roadmap() {
               checkedIds={checkedIds}
               onToggle={handleToggle}
               onBulkToggle={handleBulkToggle}
+              onOpenDetail={setActiveTask}
             />
           ))}
         </div>
+
+        {/* Task Detail Drawer */}
+        <TaskDetailDrawer
+          task={activeTask}
+          isChecked={activeTask ? checkedIds.has(activeTask.id) : false}
+          onClose={() => setActiveTask(null)}
+          onToggle={handleDrawerToggle}
+        />
 
         {totalDone === totalTasks && totalTasks > 0 && (
           <div className="mt-8 text-center py-8 rounded-2xl border border-amber-400/30 bg-amber-400/5">

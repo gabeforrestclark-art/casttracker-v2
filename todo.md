@@ -31,3 +31,14 @@
 - [x] Build Roadmap page with phase accordion, day rows, checkable tasks, and progress bars
 - [x] Add Roadmap nav item to sidebar Layout
 - [x] Write vitest tests for roadmapRouter
+
+## Interactive Roadmap + Social Publishing
+- [ ] Add socialPost table to drizzle schema (taskId, caption, platforms, status, scheduledAt, publishedAt, ayrsharePostId)
+- [ ] Run pnpm db:push to migrate socialPost table
+- [ ] Add Ayrshare API key secret
+- [ ] Build socialRouter with createPost, listByTask, deletePost procedures
+- [ ] Register socialRouter in appRouter
+- [ ] Build TaskDetailDrawer component (slide-out, notes, completion toggle, social composer)
+- [ ] Build SocialComposer component (caption editor, platform checkboxes, schedule picker, queue button)
+- [ ] Upgrade Roadmap page to open TaskDetailDrawer on task click
+- [ ] Write vitest tests for socialRouter

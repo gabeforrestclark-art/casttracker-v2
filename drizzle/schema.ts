@@ -64,3 +64,33 @@ export const roadmapTask = mysqlTable("roadmapTask", {
 
 export type RoadmapTask = typeof roadmapTask.$inferSelect;
 export type InsertRoadmapTask = typeof roadmapTask.$inferInsert;
+
+// Social Post table — stores composed posts linked to roadmap tasks
+export const socialPost = mysqlTable("socialPost", {
+  id: int("id").autoincrement().primaryKey(),
+  taskId: varchar("taskId", { length: 128 }).notNull(),
+  caption: text("caption").notNull(),
+  platforms: varchar("platforms", { length: 256 }).notNull(), // comma-separated: "instagram,facebook,tiktok"
+  status: mysqlEnum("status", ["draft", "queued", "published", "failed"]).default("draft").notNull(),
+  scheduledAt: timestamp("scheduledAt"),
+  publishedAt: timestamp("publishedAt"),
+  ayrsharePostId: varchar("ayrsharePostId", { length: 256 }),
+  errorMessage: text("errorMessage"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SocialPost = typeof socialPost.$inferSelect;
+export type InsertSocialPost = typeof socialPost.$inferInsert;
+
+// Task notes table — stores per-task notes and completion timestamps
+export const taskNote = mysqlTable("taskNote", {
+  id: int("id").autoincrement().primaryKey(),
+  taskId: varchar("taskId", { length: 128 }).notNull().unique(),
+  notes: text("notes"),
+  completedAt: timestamp("completedAt"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type TaskNote = typeof taskNote.$inferSelect;
+export type InsertTaskNote = typeof taskNote.$inferInsert;
