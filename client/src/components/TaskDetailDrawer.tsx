@@ -44,6 +44,9 @@ export function TaskDetailDrawer({ task, isChecked, onClose, onToggle }: TaskDet
   const [scheduledAt, setScheduledAt] = useState("");
   const [showComposer, setShowComposer] = useState(false);
 
+  // Fetch connected bundle.social accounts
+  const { data: connectedAccounts } = trpc.social.getConnectedAccounts.useQuery();
+
   // Fetch existing note for this task
   const { data: noteData } = trpc.social.getNote.useQuery(
     { taskId: task?.id ?? "" },
@@ -119,7 +122,7 @@ export function TaskDetailDrawer({ task, isChecked, onClose, onToggle }: TaskDet
     });
   };
 
-  const isMediaTask = task?.category === "media";
+  const isMediaTask = task?.category === "media" || task?.category === "fundraising";
 
   const statusBadge = (status: string) => {
     const map: Record<string, { label: string; className: string }> = {
@@ -215,6 +218,21 @@ export function TaskDetailDrawer({ task, isChecked, onClose, onToggle }: TaskDet
                       {showComposer ? "Cancel" : "+ New Post"}
                     </Button>
                   </div>
+
+                  {/* Connected accounts status */}
+                  {connectedAccounts && connectedAccounts.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {connectedAccounts.map((acct) => (
+                        <span
+                          key={acct.id}
+                          className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-green-500/15 text-green-400 border border-green-500/25"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                          {acct.displayName || acct.username}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   {/* Composer */}
                   {showComposer && (

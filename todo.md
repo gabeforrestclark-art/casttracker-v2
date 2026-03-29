@@ -42,3 +42,11 @@
 - [ ] Build SocialComposer component (caption editor, platform checkboxes, schedule picker, queue button)
 - [ ] Upgrade Roadmap page to open TaskDetailDrawer on task click
 - [ ] Write vitest tests for socialRouter
+
+## Bundle.social Live Publishing Integration
+- [x] Store BUNDLE_SOCIAL_API_KEY and BUNDLE_SOCIAL_TEAM_ID as env secrets
+- [ ] Build bundleSocial.ts server service (publishPost, getConnectedAccounts)
+- [ ] Update socialRouter publishNow procedure to call bundle.social API live
+- [ ] Wire connected account display and platform badges in TaskDetailDrawer
+- [ ] Write vitest test validating bundle.social API key connectivity
+- [ ] Save checkpoint
