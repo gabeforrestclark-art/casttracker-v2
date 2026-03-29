@@ -11,7 +11,7 @@ export interface RoadmapTask {
 export interface RoadmapDay {
   dayId: string;
   date: string;       // YYYY-MM-DD
-  label: string;      // e.g. "Day 1 — Saturday, April 4, 2026"
+  label: string;      // e.g. "Day 1 — Saturday, April 7, 2026"
   isTripDay: boolean;
   tripNumber?: number;
   siteName?: string;
@@ -31,13 +31,13 @@ export interface RoadmapPhase {
 
 export const ROADMAP_PHASES: RoadmapPhase[] = [
   // ─────────────────────────────────────────────
-  // PHASE 0: LAUNCH PREP (March 30 – April 3, 2026)
+  // PHASE 0: LAUNCH PREP (March 30 – April 6, 2026)
   // ─────────────────────────────────────────────
   {
     phaseId: "phase-0",
     title: "LAUNCH PREP",
     subtitle: "Get everything ready before the first paddle hits the water",
-    dateRange: "March 30 – April 3, 2026",
+    dateRange: "March 30 – April 6, 2026",
     color: "oklch(0.65 0.18 50)",
     icon: "🚀",
     days: [
@@ -89,15 +89,15 @@ export const ROADMAP_PHASES: RoadmapPhase[] = [
           { id: "p0-d4-t2", label: "Check all safety gear: PFD, whistle, first aid kit, dry bag", category: "gear" },
           { id: "p0-d4-t3", label: "Charge all camera batteries and clear SD cards", category: "media" },
           { id: "p0-d4-t4", label: "Rig rods for Red River — catfish/walleye setup", category: "fishing" },
-          { id: "p0-d4-t5", label: "Check weather forecast for Saturday April 4", category: "fishing" },
+          { id: "p0-d4-t5", label: "Check weather forecast for Saturday April 7", category: "fishing" },
           { id: "p0-d4-t6", label: "Make the announcement video public on YouTube", category: "media" },
           { id: "p0-d4-t7", label: "Post campaign launch on all social platforms with GoFundMe link", category: "media" },
         ],
       },
       {
         dayId: "p0-d5",
-        date: "2026-04-03",
-        label: "Friday, April 3 — Day Before Trip 1",
+        date: "2026-04-06",
+        label: "Monday, April 6 — Day Before Trip 1",
         isTripDay: false,
         tasks: [
           { id: "p0-d5-t1", label: "Load kayak on truck the night before", category: "gear" },
@@ -111,20 +111,20 @@ export const ROADMAP_PHASES: RoadmapPhase[] = [
   },
 
   // ─────────────────────────────────────────────
-  // PHASE 1: SEASON 1 (April 4 – November 28, 2026)
+  // PHASE 1: SEASON 1 (April 7 – November 28, 2026)
   // ─────────────────────────────────────────────
   {
     phaseId: "phase-1",
     title: "SEASON 1 — 2026",
     subtitle: "35 trips across Minnesota's northwest, central, and northeast regions",
-    dateRange: "April 4 – November 28, 2026",
+    dateRange: "April 7 – November 28, 2026",
     color: "oklch(0.65 0.18 200)",
     icon: "🛶",
     days: [
       {
         dayId: "p1-d1",
-        date: "2026-04-04",
-        label: "Saturday, April 4 — TRIP 1",
+        date: "2026-04-07",
+        label: "Saturday, April 7 — TRIP 1",
         isTripDay: true,
         tripNumber: 1,
         siteName: "Red River - Moorhead Access",

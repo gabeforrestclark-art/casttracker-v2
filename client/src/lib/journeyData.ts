@@ -1,6 +1,7 @@
 // Working Man's Waters — Complete Journey Data
 // 70 public kayak fishing access sites across Minnesota
 // 124 trips over 4 open-water seasons (April 2026 – August 2029)
+// Journey start date: Saturday, April 7, 2026
 
 export interface JourneySite {
   id: number;
@@ -117,7 +118,7 @@ function generateSchedule(): JourneyTrip[] {
 
   const openMonths = [4, 5, 6, 7, 8, 9, 10, 11]; // April-November
 
-  let currentDate = new Date(2026, 3, 4); // April 4, 2026 (Saturday)
+  let currentDate = new Date(2026, 3, 7); // April 7, 2026 (Saturday) — official journey start date
   let localIndex = 0;
   let journeyIndex = 0;
   let tripNumber = 0;
