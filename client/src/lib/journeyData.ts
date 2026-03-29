@@ -192,43 +192,37 @@ export const CAUSES = [
   },
 ];
 
-export const SPONSORS = [
-  { id: 1, name: "Moorhead Tourism Board", status: "negotiating", type: "Video", value: 750, contact: "Dave Johnson", email: "dave@moorheadtourism.com", dateRange: "Apr 1 – Jun 30, 2026", deliverables: "2 YouTube videos showcasing Red River fishing in Moorhead area" },
-  { id: 2, name: "St. Croix Rods", status: "active", type: "Ambassador", value: 200, contact: "Lisa Chen", email: "lisa@stcroixrods.com", dateRange: "Jan 1 – Dec 31, 2026", deliverables: "Monthly content featuring St. Croix rods, logo on boat" },
-  { id: 3, name: "Rapala", status: "active", type: "Product Review", value: 500, contact: "John Smith", email: "john@rapala.com", dateRange: "Mar 1 – Apr 30, 2026", deliverables: "3 Instagram posts, 1 YouTube video reviewing new Shad Rap colors" },
-];
+// Sponsors start empty — add real sponsors as you land them
+export const SPONSORS: Array<{ id: number; name: string; status: string; type: string; value: number; contact: string; email: string; dateRange: string; deliverables: string }> = [];
 
-export const SOCIAL_POSTS = [
-  { id: 1, content: "Gear review: My top 5 walleye lures for early spring.", tags: ["#gearreview", "#walleyelures", "#fishingtackle"], status: "draft", platforms: ["tiktok"], date: null },
-  { id: 2, content: "Spring crappie run is ON at Lake Lida! Caught our limit in just 2 hours.", tags: ["#crappie", "#lakelida", "#springrun", "#panfishing", "#minnesota"], status: "scheduled", platforms: ["instagram", "youtube", "facebook"], date: "2026-03-30T16:00:00" },
-  { id: 3, content: "Dawn patrol on the Red River — nothing beats first light on the water. #redriver #catfishing #dawnpatrol #moorheadmn", tags: ["#redriver", "#catfishing", "#dawnpatrol", "#moorheadmn"], status: "published", platforms: ["tiktok"], date: "2026-03-22" },
-  { id: 4, content: "Monster walleye on Detroit Lake! 28\" beauty that put up an incredible fight on light tackle. 🎣", tags: ["#walleye", "#detroitlake", "#minnesotafishing", "#springfishing", "#catchandrelease"], status: "published", platforms: ["instagram"], date: "2026-03-15" },
-];
+// Social posts start empty — all real posts will be created through the Social page
+export const SOCIAL_POSTS: Array<{ id: number; content: string; tags: string[]; status: string; platforms: string[]; date: string | null }> = [];
 
+// Analytics start at zero — stats will grow as the campaign launches
 export const ANALYTICS = {
-  totalFollowers: 12847,
-  engagement: 34521,
-  totalViews: 287400,
-  postsPublished: 156,
-  followerGrowth: 8.3,
-  engagementGrowth: 4.7,
-  viewsGrowth: 12.1,
-  postsGrowth: 7.0,
+  totalFollowers: 0,
+  engagement: 0,
+  totalViews: 0,
+  postsPublished: 0,
+  followerGrowth: 0,
+  engagementGrowth: 0,
+  viewsGrowth: 0,
+  postsGrowth: 0,
   platforms: [
-    { name: "Instagram", followers: 5240, color: "#E1306C" },
-    { name: "YouTube", followers: 3180, color: "#FF0000" },
-    { name: "TikTok", followers: 2890, color: "#69C9D0" },
-    { name: "Facebook", followers: 1120, color: "#1877F2" },
-    { name: "X/Twitter", followers: 417, color: "#1DA1F2" },
+    { name: "Instagram", followers: 0, color: "#E1306C" },
+    { name: "YouTube", followers: 0, color: "#FF0000" },
+    { name: "TikTok", followers: 0, color: "#69C9D0" },
+    { name: "Facebook", followers: 0, color: "#1877F2" },
+    { name: "X/Twitter", followers: 0, color: "#1DA1F2" },
   ],
   weeklyEngagement: [
-    { day: "Mon", instagram: 180, youtube: 120, tiktok: 95 },
-    { day: "Tue", instagram: 220, youtube: 145, tiktok: 110 },
-    { day: "Wed", instagram: 310, youtube: 200, tiktok: 180 },
-    { day: "Thu", instagram: 280, youtube: 175, tiktok: 160 },
-    { day: "Fri", instagram: 520, youtube: 310, tiktok: 290 },
-    { day: "Sat", instagram: 610, youtube: 420, tiktok: 380 },
-    { day: "Sun", instagram: 450, youtube: 280, tiktok: 240 },
+    { day: "Mon", instagram: 0, youtube: 0, tiktok: 0 },
+    { day: "Tue", instagram: 0, youtube: 0, tiktok: 0 },
+    { day: "Wed", instagram: 0, youtube: 0, tiktok: 0 },
+    { day: "Thu", instagram: 0, youtube: 0, tiktok: 0 },
+    { day: "Fri", instagram: 0, youtube: 0, tiktok: 0 },
+    { day: "Sat", instagram: 0, youtube: 0, tiktok: 0 },
+    { day: "Sun", instagram: 0, youtube: 0, tiktok: 0 },
   ],
 };
 
