@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { JOURNEY_TRIPS, JOURNEY_SITES } from "@/lib/journeyData";
-import { Fish, MapPin, Calendar, ChevronDown, ChevronUp } from "lucide-react";
+import { Fish, MapPin, Calendar, ChevronDown, ChevronUp, Camera } from "lucide-react";
+import { MediaUploadModal } from "@/components/MediaUploadModal";
+import { TripMediaGallery } from "@/components/TripMediaGallery";
 
 const teal = "oklch(0.65 0.18 200)";
 const orange = "oklch(0.65 0.18 50)";
@@ -19,6 +21,8 @@ export default function TripLog() {
   const [filter, setFilter] = useState<"all" | "completed" | "upcoming" | "planned">("all");
   const [expanded, setExpanded] = useState<number | null>(null);
   const [season, setSeason] = useState<number | "all">("all");
+  const [uploadModal, setUploadModal] = useState<{ tripNumber: number; tripName: string } | null>(null);
+  const [galleryRefreshKey, setGalleryRefreshKey] = useState(0);
 
   const filtered = JOURNEY_TRIPS.filter(t => {
     if (filter !== "all" && t.status !== filter) return false;
@@ -93,6 +97,7 @@ export default function TripLog() {
               className="rounded-xl overflow-hidden"
               style={{ background: dark, border: `1px solid ${border}` }}
             >
+              {/* Trip Row Header */}
               <div
                 className="flex items-center gap-4 p-4 cursor-pointer"
                 onClick={() => setExpanded(isExpanded ? null : trip.tripNumber)}
@@ -126,8 +131,11 @@ export default function TripLog() {
                   {isExpanded ? <ChevronUp size={14} style={{ color: muted }} /> : <ChevronDown size={14} style={{ color: muted }} />}
                 </div>
               </div>
+
+              {/* Expanded Panel */}
               {isExpanded && (
                 <div className="px-4 pb-4 pt-0 border-t" style={{ borderColor: border }}>
+                  {/* Trip Details */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-3">
                     <div>
                       <div className="text-xs mb-1" style={{ color: muted }}>DRIVE TIME</div>
@@ -146,6 +154,8 @@ export default function TripLog() {
                       <div className="text-sm font-semibold" style={{ color: fg }}>{site.targetSpecies.slice(0, 2).join(", ")}</div>
                     </div>
                   </div>
+
+                  {/* Species Tags */}
                   <div className="mt-3 flex gap-2 flex-wrap">
                     {site.targetSpecies.map(sp => (
                       <span key={sp} className="text-xs px-2 py-0.5 rounded" style={{ background: `${teal}10`, color: teal }}>
@@ -153,12 +163,52 @@ export default function TripLog() {
                       </span>
                     ))}
                   </div>
+
+                  {/* Media Section */}
+                  <div className="mt-4 pt-4 border-t" style={{ borderColor: border }}>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Camera size={14} style={{ color: teal }} />
+                        <span className="text-xs font-medium tracking-widest uppercase" style={{ color: muted }}>TRIP PHOTOS & VIDEOS</span>
+                      </div>
+                      <button
+                        onClick={e => {
+                          e.stopPropagation();
+                          setUploadModal({ tripNumber: trip.tripNumber, tripName: site.name });
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                        style={{
+                          background: `${teal}20`,
+                          color: teal,
+                          border: `1px solid ${teal}40`,
+                        }}
+                      >
+                        <Camera size={12} />
+                        Add Media
+                      </button>
+                    </div>
+                    <TripMediaGallery key={`${trip.tripNumber}-${galleryRefreshKey}`} tripNumber={trip.tripNumber} />
+                  </div>
                 </div>
               )}
             </div>
           );
         })}
       </div>
+
+      {/* Upload Modal */}
+      {uploadModal && (
+        <MediaUploadModal
+          open={true}
+          onClose={() => setUploadModal(null)}
+          tripNumber={uploadModal.tripNumber}
+          tripName={uploadModal.tripName}
+          onUploaded={() => {
+            setGalleryRefreshKey(k => k + 1);
+            setUploadModal(null);
+          }}
+        />
+      )}
     </div>
   );
 }

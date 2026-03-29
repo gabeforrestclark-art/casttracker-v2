@@ -14,8 +14,8 @@ import Fundraising from "./pages/Fundraising";
 import Analytics from "./pages/Analytics";
 import ContentCalendar from "./pages/ContentCalendar";
 import MediaCampaign from "./pages/MediaCampaign";
-
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Layout>
       <Switch>
