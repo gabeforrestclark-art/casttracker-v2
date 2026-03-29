@@ -94,3 +94,38 @@ export const taskNote = mysqlTable("taskNote", {
 
 export type TaskNote = typeof taskNote.$inferSelect;
 export type InsertTaskNote = typeof taskNote.$inferInsert;
+
+// Trip Catch Log — records actual catch data after each Saturday trip
+export const tripCatch = mysqlTable("tripCatch", {
+  id: int("id").autoincrement().primaryKey(),
+  tripNumber: int("tripNumber").notNull().unique(),
+  fishCaught: int("fishCaught").notNull().default(0),
+  speciesJson: text("speciesJson"), // JSON: [{species, count, biggestInches}]
+  waterTemp: varchar("waterTemp", { length: 32 }),
+  weatherSummary: varchar("weatherSummary", { length: 128 }),
+  windMph: int("windMph"),
+  baitUsed: text("baitUsed"),
+  launchTime: varchar("launchTime", { length: 32 }),
+  hoursOnWater: varchar("hoursOnWater", { length: 32 }),
+  gpsLat: varchar("gpsLat", { length: 32 }),
+  gpsLng: varchar("gpsLng", { length: 32 }),
+  personalNotes: text("personalNotes"),
+  generatedCaption: text("generatedCaption"),
+  loggedAt: timestamp("loggedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type TripCatch = typeof tripCatch.$inferSelect;
+export type InsertTripCatch = typeof tripCatch.$inferInsert;
+
+// Automation Log — records automation runs (donor checks, weather alerts, monthly reports)
+export const automationLog = mysqlTable("automationLog", {
+  id: int("id").autoincrement().primaryKey(),
+  type: varchar("type", { length: 64 }).notNull(), // 'donor_check' | 'weather_alert' | 'monthly_report'
+  status: mysqlEnum("status", ["success", "skipped", "error"]).notNull().default("success"),
+  summary: text("summary"),
+  runAt: timestamp("runAt").defaultNow().notNull(),
+});
+
+export type AutomationLog = typeof automationLog.$inferSelect;
+export type InsertAutomationLog = typeof automationLog.$inferInsert;
