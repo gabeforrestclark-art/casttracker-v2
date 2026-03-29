@@ -12,7 +12,6 @@ import Social from "./pages/Social";
 import Sponsors from "./pages/Sponsors";
 import Fundraising from "./pages/Fundraising";
 import Analytics from "./pages/Analytics";
-import ContentCalendar from "./pages/ContentCalendar";
 import MediaCampaign from "./pages/MediaCampaign";
 import Roadmap from "./pages/Roadmap";
 function Router() {
@@ -27,7 +26,6 @@ function Router() {
         <Route path="/sponsors" component={Sponsors} />
         <Route path="/fundraising" component={Fundraising} />
         <Route path="/analytics" component={Analytics} />
-        <Route path="/calendar" component={ContentCalendar} />
         <Route path="/campaign" component={MediaCampaign} />
         <Route path="/roadmap" component={Roadmap} />
         <Route path="/404" component={NotFound} />
