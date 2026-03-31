@@ -1,6 +1,7 @@
 import { JOURNEY_TRIPS, JOURNEY_SITES, ANALYTICS, FUNDRAISING } from "@/lib/journeyData";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { Anchor, TrendingUp, Eye, FileText, Users, Heart, Map, Fish } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Anchor, TrendingUp, Eye, FileText, Users, Heart, Map, Fish, Rocket, Clock } from "lucide-react";
 
 const teal = "oklch(0.65 0.18 200)";
 const orange = "oklch(0.65 0.18 50)";
@@ -10,6 +11,7 @@ const muted = "oklch(0.45 0.01 200)";
 const fg = "oklch(0.92 0.005 200)";
 
 function StatCard({ icon: Icon, label, value, growth, color }: { icon: any; label: string; value: string; growth?: string; color?: string }) {
+  const showGrowth = growth && growth !== "0%" && growth !== "0";
   return (
     <div className="rounded-xl p-5" style={{ background: dark, border: `1px solid ${border}` }}>
       <div className="flex items-center justify-between mb-3">
@@ -19,7 +21,92 @@ function StatCard({ icon: Icon, label, value, growth, color }: { icon: any; labe
         </div>
       </div>
       <div className="text-3xl font-bold" style={{ color: fg, fontFamily: "'Oswald', sans-serif" }}>{value}</div>
-      {growth && <div className="text-xs mt-1" style={{ color: teal }}>↑ {growth} vs last month</div>}
+      {showGrowth
+        ? <div className="text-xs mt-1" style={{ color: teal }}>↑ {growth} vs last month</div>
+        : <div className="text-xs mt-1" style={{ color: muted }}>Campaign launches Apr 7</div>
+      }
+    </div>
+  );
+}
+
+// ── Pre-Launch Countdown ──────────────────────────────────────────────────────
+function LaunchCountdown() {
+  const LAUNCH_DATE = new Date("2026-04-07T05:00:00-05:00"); // 5am CDT launch day
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, launched: false });
+
+  useEffect(() => {
+    const calc = () => {
+      const now = new Date();
+      const diff = LAUNCH_DATE.getTime() - now.getTime();
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, launched: true });
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      setTimeLeft({ days, hours, minutes, seconds, launched: false });
+    };
+    calc();
+    const interval = setInterval(calc, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (timeLeft.launched) return null;
+
+  const unit = (val: number, label: string) => (
+    <div className="flex flex-col items-center">
+      <div className="text-4xl font-bold tabular-nums" style={{ color: teal, fontFamily: "'JetBrains Mono', monospace", minWidth: "3ch", textAlign: "center" }}>
+        {String(val).padStart(2, "0")}
+      </div>
+      <div className="text-xs tracking-widest uppercase mt-1" style={{ color: muted }}>{label}</div>
+    </div>
+  );
+
+  const sep = () => (
+    <div className="text-3xl font-bold pb-4" style={{ color: muted }}>:</div>
+  );
+
+  return (
+    <div className="rounded-xl overflow-hidden" style={{ background: `oklch(0.13 0.025 200)`, border: `1px solid ${teal}30` }}>
+      {/* Top accent bar */}
+      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${teal}, oklch(0.65 0.18 50))` }} />
+      <div className="p-5">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          {/* Left: label */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${teal}20` }}>
+              <Rocket size={20} style={{ color: teal }} />
+            </div>
+            <div>
+              <div className="font-bold text-base" style={{ color: fg, fontFamily: "'Oswald', sans-serif", letterSpacing: "0.06em" }}>
+                CAMPAIGN LAUNCHES IN
+              </div>
+              <div className="text-xs mt-0.5" style={{ color: muted }}>
+                Trip #1 — Red River, Moorhead MN — April 7, 2026
+              </div>
+            </div>
+          </div>
+          {/* Right: countdown */}
+          <div className="flex items-end gap-3">
+            {unit(timeLeft.days, "Days")}
+            {sep()}
+            {unit(timeLeft.hours, "Hrs")}
+            {sep()}
+            {unit(timeLeft.minutes, "Min")}
+            {sep()}
+            {unit(timeLeft.seconds, "Sec")}
+          </div>
+        </div>
+        {/* Bottom note */}
+        <div className="mt-4 pt-3 border-t flex items-center gap-2" style={{ borderColor: `${teal}20` }}>
+          <Clock size={12} style={{ color: muted }} />
+          <span className="text-xs" style={{ color: muted }}>
+            One paddle. One kayak. All of Minnesota. 124 trips across 4 seasons — 15% of every dollar to Heroes on the Water.
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -50,6 +137,9 @@ export default function Dashboard() {
           <span className="text-sm font-medium" style={{ color: teal }}>SEASON 1 — 2026</span>
         </div>
       </div>
+
+      {/* Pre-Launch Countdown */}
+      <LaunchCountdown />
 
       {/* Journey Progress Banner */}
       <div className="rounded-xl p-5" style={{ background: dark, border: `1px solid ${border}` }}>

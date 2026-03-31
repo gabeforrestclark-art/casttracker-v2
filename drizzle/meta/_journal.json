@@ -43,6 +43,13 @@
       "when": 1774767120751,
       "tag": "0005_abnormal_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1774768096276,
+      "tag": "0006_quick_boomerang",
+      "breakpoints": true
     }
   ]
 }

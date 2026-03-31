@@ -129,3 +129,18 @@ export const automationLog = mysqlTable("automationLog", {
 
 export type AutomationLog = typeof automationLog.$inferSelect;
 export type InsertAutomationLog = typeof automationLog.$inferInsert;
+
+// Social Accounts table — stores manually-updated follower counts per platform
+export const socialAccounts = mysqlTable("socialAccounts", {
+  id: int("id").autoincrement().primaryKey(),
+  platform: varchar("platform", { length: 50 }).notNull().unique(), // instagram, youtube, tiktok, facebook, twitter
+  handle: varchar("handle", { length: 100 }).notNull().default(""),
+  followers: int("followers").notNull().default(0),
+  views: int("views").notNull().default(0),
+  posts: int("posts").notNull().default(0),
+  profileUrl: varchar("profileUrl", { length: 255 }).notNull().default(""),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SocialAccount = typeof socialAccounts.$inferSelect;
+export type InsertSocialAccount = typeof socialAccounts.$inferInsert;
