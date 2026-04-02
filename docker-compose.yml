@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # Cast Tracker application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: casttracker-app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL:-mysql://root:password@db:3306/casttracker}
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      VITE_APP_ID: ${VITE_APP_ID}
+      OAUTH_SERVER_URL: ${OAUTH_SERVER_URL:-https://api.manus.im}
+      VITE_OAUTH_PORTAL_URL: ${VITE_OAUTH_PORTAL_URL}
+      OWNER_OPEN_ID: ${OWNER_OPEN_ID}
+      OWNER_NAME: ${OWNER_NAME:-Gabe}
+      BUILT_IN_FORGE_API_URL: ${BUILT_IN_FORGE_API_URL}
+      BUILT_IN_FORGE_API_KEY: ${BUILT_IN_FORGE_API_KEY}
+      VITE_FRONTEND_FORGE_API_KEY: ${VITE_FRONTEND_FORGE_API_KEY}
+      VITE_FRONTEND_FORGE_API_URL: ${VITE_FRONTEND_FORGE_API_URL}
+      VITE_ANALYTICS_ENDPOINT: ${VITE_ANALYTICS_ENDPOINT}
+      VITE_ANALYTICS_WEBSITE_ID: ${VITE_ANALYTICS_WEBSITE_ID}
+      VITE_APP_TITLE: "CastTracker - Working Man's Waters"
+      VITE_APP_LOGO: ${VITE_APP_LOGO}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - casttracker-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MySQL database
+  db:
+    image: mysql:8.0
+    container_name: casttracker-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-password}
+      MYSQL_DATABASE: casttracker
+      MYSQL_USER: casttracker
+      MYSQL_PASSWORD: ${DB_PASSWORD:-casttracker}
+    ports:
+      - "3306:3306"
+    volumes:
+      - casttracker-db-data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - casttracker-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  casttracker-db-data:
+    driver: local
+
+networks:
+  casttracker-network:
+    driver: bridge
